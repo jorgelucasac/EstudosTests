@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Features.Tests
 {
-    [CollectionDefinition(nameof(ClienteCollection))]
+    [Collection(nameof(ClienteCollection))]
     public class ClienteTesteInvalido
     {
         private readonly ClienteTestsFixture _clienteTestsFixture;
