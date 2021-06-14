@@ -503,3 +503,4 @@ src/Estudos.App.Web/wwwroot/uploadImagens/
 src/Estudos.App.WebApi/wwwroot/app/
 src/Estudos.App.WebApi/wwwroot/uploadImages/
 .vscode/
+xunit.runner.json
