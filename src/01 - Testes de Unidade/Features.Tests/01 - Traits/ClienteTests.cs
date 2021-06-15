@@ -1,5 +1,5 @@
-﻿using System;
-using Features.Clientes;
+﻿using Features.Clientes;
+using System;
 using Xunit;
 
 namespace Features.Tests
@@ -39,7 +39,7 @@ namespace Features.Tests
                 Guid.NewGuid(),
                 "",
                 "",
-                DateTime.Now, 
+                DateTime.Now,
                 "jorge1email.com",
                 true,
                 DateTime.Now

@@ -42,7 +42,7 @@ namespace Demo.Tests
             // Arrange & Act
             var funcionario = FuncionarioFactory.Criar("Jorge", 15000);
 
-            var todasHabilidades = new []
+            var todasHabilidades = new[]
             {
                 "Lógica de Programação",
                 "OOP",

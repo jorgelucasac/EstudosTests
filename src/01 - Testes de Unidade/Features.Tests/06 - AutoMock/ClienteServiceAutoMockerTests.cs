@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using System.Threading;
-using Features.Clientes;
+﻿using Features.Clientes;
 using MediatR;
 using Moq;
 using Moq.AutoMock;
+using System.Linq;
+using System.Threading;
 using Xunit;
 
 namespace Features.Tests
@@ -83,7 +83,7 @@ namespace Features.Tests
             // Assert
             moker.GetMock<IClienteRepository>().Verify(r => r.ObterTodos(), Times.Once);
             Assert.True(clientes.Any());
-            Assert.False(clientes.Count(c=> !c.Ativo)> 0);
+            Assert.False(clientes.Count(c => !c.Ativo) > 0);
         }
     }
 }

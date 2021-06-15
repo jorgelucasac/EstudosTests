@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using System.Threading;
-using Features.Clientes;
+﻿using Features.Clientes;
 using MediatR;
 using Moq;
+using System.Linq;
+using System.Threading;
 using Xunit;
 
 namespace Features.Tests

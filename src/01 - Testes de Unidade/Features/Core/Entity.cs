@@ -1,5 +1,5 @@
-﻿using System;
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
+using System;
 
 namespace Features.Core
 {
@@ -9,7 +9,7 @@ namespace Features.Core
         public ValidationResult ValidationResult { get; protected set; }
 
         public abstract bool EhValido();
-       
+
 
         public override bool Equals(object obj)
         {

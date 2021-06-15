@@ -1,6 +1,4 @@
-﻿using System;
-using Features.Clientes;
-using Xunit;
+﻿using Xunit;
 
 namespace Features.Tests
 {

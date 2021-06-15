@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using System.Threading;
-using Features.Clientes;
+﻿using Features.Clientes;
 using FluentAssertions;
 using MediatR;
 using Moq;
+using System.Linq;
+using System.Threading;
 using Xunit;
 
 namespace Features.Tests
@@ -85,7 +85,7 @@ namespace Features.Tests
             clientes.Should().NotContain(c => !c.Ativo);
 
             _clienteTestsAutoMockerFixture.Mocker.GetMock<IClienteRepository>().Verify(r => r.ObterTodos(), Times.Once);
-           
+
         }
     }
 }
