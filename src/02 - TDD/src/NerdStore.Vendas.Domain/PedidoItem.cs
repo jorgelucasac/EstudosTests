@@ -11,10 +11,14 @@ namespace NerdStore.Vendas.Domain
 
         public PedidoItem(Guid produtoId, string produtoNome, int quantidade, decimal valorUnitario)
         {
+            if (quantidade < Pedido.MinUnidadesItems)
+                throw new DomainException($"A quantidade mínima para um produto é {Pedido.MinUnidadesItems}");
+
+
             ProdutoId = produtoId;
-            this.ProdutoNome = produtoNome;
-            this.Quantidade = quantidade;
-            this.ValorUnitario = valorUnitario;
+            ProdutoNome = produtoNome;
+            Quantidade = quantidade;
+            ValorUnitario = valorUnitario;
         }
 
         internal decimal CalcularValorTotal()

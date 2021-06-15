@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace NerdStore.Vendas.Domain
 {
     public class Pedido
     {
+        public const int MaxUnidadesItems = 15;
+        public const int MinUnidadesItems = 1;
+
         public decimal ValorTotal { get; private set; }
         public Guid ClienteId { get; private set; }
         public PedidoStatus PedidoStatus { get; private set; }
@@ -25,6 +27,10 @@ namespace NerdStore.Vendas.Domain
 
         public void AdicionarItem(PedidoItem pedidoItem)
         {
+            if (pedidoItem.Quantidade > MaxUnidadesItems)
+                throw new DomainException($"A quantidade máxima para um produto é {MaxUnidadesItems}");
+
+
             var itemExistente = _pedidoItens.FirstOrDefault(p => p.ProdutoId == pedidoItem.ProdutoId);
             if (itemExistente != null)
             {
