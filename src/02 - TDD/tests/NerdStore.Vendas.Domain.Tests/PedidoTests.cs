@@ -95,7 +95,7 @@ namespace NerdStore.Vendas.Domain.Tests
             pedido.AtualizarItem(pedidoItemAtualizado);
 
             // Assert 
-            Assert.Equal(novaQuantidade, pedido.PedidoItens.First(p=> p.ProdutoId == produtoId).Quantidade);
+            Assert.Equal(novaQuantidade, pedido.PedidoItens.First(p => p.ProdutoId == produtoId).Quantidade);
         }
 
         [Fact(DisplayName = "Atualizar Item Pedido Validar Total")]
@@ -135,6 +135,40 @@ namespace NerdStore.Vendas.Domain.Tests
 
             // Act & Assert
             Assert.Throws<DomainException>(() => pedido.AtualizarItem(pedidoItemAtualizado));
+        }
+
+        [Fact(DisplayName = "Remover Item Pedido Inexistente")]
+        [Trait("Categoria", "Vendas - Pedido")]
+        public void RemoverItemPedido_ItemInexistenteNaLista_DeveRetornarException()
+        {
+            // Arrange
+            var pedido = Pedido.PedidoFactory.NovoPedidoRascunho(Guid.NewGuid());
+            var pedidoItem = new PedidoItem(Guid.NewGuid(), "Produto Teste", 3, 15);
+
+            // Act & Assert
+            Assert.Throws<DomainException>(() => pedido.RemoverItem(pedidoItem));
+        }
+
+        [Fact(DisplayName = "Remover Item Pedido Existente")]
+        [Trait("Categoria", "Vendas - Pedido")]
+        public void RemoverItemPedido_ItemExistenteNaLista_DeveAtualizarValor()
+        {
+            // Arrange
+            var pedido = Pedido.PedidoFactory.NovoPedidoRascunho(Guid.NewGuid());
+            var produtoId = Guid.NewGuid();
+            var pedidoItem = new PedidoItem(Guid.NewGuid(), "Produto Xpto", 2, 100);
+            var pedidoItem2 = new PedidoItem(produtoId, "Produto Teste", 3, 15);
+            pedido.AdicionarItem(pedidoItem);
+            pedido.AdicionarItem(pedidoItem2);
+
+
+            var totalPedido = pedidoItem2.Quantidade * pedidoItem2.ValorUnitario;
+
+            // Act
+            pedido.RemoverItem(pedidoItem);
+
+            // Assert
+            Assert.Equal(totalPedido, pedido.ValorTotal);
         }
     }
 }
