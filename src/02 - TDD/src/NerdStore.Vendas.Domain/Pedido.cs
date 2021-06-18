@@ -27,6 +27,7 @@ namespace NerdStore.Vendas.Domain
         private void CalcularValorPedido()
         {
             ValorTotal = _pedidoItens.Sum(i => i.CalcularValorTotal());
+            CalcularValorDesconto();
         }
 
         public bool PedidoItemExiste(PedidoItem pedidoItem)
@@ -73,6 +74,8 @@ namespace NerdStore.Vendas.Domain
 
             _pedidoItens.Add(pedidoItem);
             CalcularValorPedido();
+           
+
         }
 
         public void AtualizarItem(PedidoItem pedidoItem)
@@ -102,21 +105,6 @@ namespace NerdStore.Vendas.Domain
             PedidoStatus = PedidoStatus.Rascunho;
         }
 
-        public static class PedidoFactory
-        {
-            public static Pedido NovoPedidoRascunho(Guid clienteId)
-            {
-                var pedido = new Pedido()
-                {
-                    ClienteId = clienteId
-                };
-
-                pedido.TornarRascuho();
-                return pedido;
-            }
-        }
-
-
         public ValidationResult AplicarVoucher(Voucher voucher)
         {
             var result = voucher.ValidarSeAplicavel();
@@ -125,7 +113,7 @@ namespace NerdStore.Vendas.Domain
             VoucherUtilizado = true;
             Voucher = voucher;
 
-            CalcularValorDesconto();
+            CalcularValorPedido();
 
             return result;
         }
@@ -145,6 +133,21 @@ namespace NerdStore.Vendas.Domain
             }
 
             ValorTotal -= Desconto;
+            if (ValorTotal < 0) ValorTotal = 0;
+        }
+
+        public static class PedidoFactory
+        {
+            public static Pedido NovoPedidoRascunho(Guid clienteId)
+            {
+                var pedido = new Pedido()
+                {
+                    ClienteId = clienteId
+                };
+
+                pedido.TornarRascuho();
+                return pedido;
+            }
         }
     }
 }

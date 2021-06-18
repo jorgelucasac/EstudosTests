@@ -248,5 +248,51 @@ namespace NerdStore.Vendas.Domain.Tests
             // Assert
             Assert.Equal(valorComDesconto, pedido.ValorTotal);
         }
+
+        [Fact(DisplayName = "Aplicar Voucher Desconto Excede Valor Total")]
+        [Trait("Categoria", "Vendas - Pedido")]
+        public void AplicarVoucher_DescontoExcedeValorTotalPedido_PedidoDeveTerValorZero()
+        {
+            // Arrange
+            var pedido = Pedido.PedidoFactory.NovoPedidoRascunho(Guid.NewGuid());
+
+            var pedidoItem = new PedidoItem(Guid.NewGuid(), "Produto Teste", 5, 100);
+            pedido.AdicionarItem(pedidoItem);
+
+            var voucher = new Voucher("PROMO-15-REAIS", 1000, null, 1,
+                DateTime.Now.AddDays(15), true, false, TipoDescontoVoucher.Valor);
+
+            // Act
+            pedido.AplicarVoucher(voucher);
+
+            // Assert
+            Assert.Equal(0, pedido.ValorTotal);
+        }
+
+        [Fact(DisplayName = "Aplicar Voucher Recalcular Desconto na Modificação do Pedido")]
+        [Trait("Categoria", "Vendas - Pedido")]
+        public void AplicarVoucher_ModificarItensPedido_DeveCalcularDescontoValorTotal()
+        {
+            // Arrange
+            var pedido = Pedido.PedidoFactory.NovoPedidoRascunho(Guid.NewGuid());
+            var pedidoItem1 = new PedidoItem(Guid.NewGuid(), "Produto Xpto", 2, 100);
+            pedido.AdicionarItem(pedidoItem1);
+            
+            var voucher = new Voucher("PROMO-15-REAIS", 100, null, 1,
+                DateTime.Now.AddDays(15), true, false, TipoDescontoVoucher.Valor);
+
+            pedido.AplicarVoucher(voucher);
+
+            var pedidoItem2 = new PedidoItem(Guid.NewGuid(), "Produto Xpto", 3, 100);
+            
+            
+            // Act
+            pedido.AdicionarItem(pedidoItem2);
+
+            // Assert
+             var totalEsperado = pedido.PedidoItens.Sum(i => i.Quantidade * i.ValorUnitario) - voucher.ValorDesconto;
+            Assert.Equal(totalEsperado, pedido.ValorTotal);
+
+        }
     }
 }
