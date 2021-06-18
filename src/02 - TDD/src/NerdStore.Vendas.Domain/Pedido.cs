@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentValidation.Results;
 
 namespace NerdStore.Vendas.Domain
 {
@@ -12,8 +13,11 @@ namespace NerdStore.Vendas.Domain
         public decimal ValorTotal { get; private set; }
         public Guid ClienteId { get; private set; }
         public PedidoStatus PedidoStatus { get; private set; }
-        private readonly List<PedidoItem> _pedidoItens;
+        public decimal Desconto { get; private set; }
+        public bool VoucherUtilizado { get; private set; }
+        public Voucher Voucher { get; private set; }
         public IReadOnlyCollection<PedidoItem> PedidoItens => _pedidoItens.AsReadOnly();
+        private readonly List<PedidoItem> _pedidoItens;
 
         protected Pedido()
         {
@@ -88,7 +92,7 @@ namespace NerdStore.Vendas.Domain
         {
             ValidarPedidoItemInexistente(pedidoItem);
             var itemExiste = ObterPedidoItemExistente(pedidoItem.ProdutoId);
-            
+
             _pedidoItens.Remove(itemExiste);
             CalcularValorPedido();
         }
@@ -113,5 +117,34 @@ namespace NerdStore.Vendas.Domain
         }
 
 
+        public ValidationResult AplicarVoucher(Voucher voucher)
+        {
+            var result = voucher.ValidarSeAplicavel();
+            if (!result.IsValid) return result;
+
+            VoucherUtilizado = true;
+            Voucher = voucher;
+
+            CalcularValorDesconto();
+
+            return result;
+        }
+
+        private void CalcularValorDesconto()
+        {
+            if (!VoucherUtilizado) return;
+            if (Voucher.TipoDescontoVoucher == TipoDescontoVoucher.Valor)
+            {
+                if (Voucher.ValorDesconto.HasValue)
+                    Desconto = Voucher.ValorDesconto.Value;
+            }
+            else
+            {
+                if (Voucher.PercentualDesconto.HasValue)
+                    Desconto = (Voucher.PercentualDesconto.Value / 100 * ValorTotal);
+            }
+
+            ValorTotal -= Desconto;
+        }
     }
 }

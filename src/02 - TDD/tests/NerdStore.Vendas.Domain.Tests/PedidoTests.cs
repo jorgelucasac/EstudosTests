@@ -170,5 +170,83 @@ namespace NerdStore.Vendas.Domain.Tests
             // Assert
             Assert.Equal(totalPedido, pedido.ValorTotal);
         }
+
+        [Fact(DisplayName = "Aplicar Voucher Válido")]
+        [Trait("Categoria", "Vendas - Pedido")]
+        public void Pedido_AplicarVoucherValido_DeveRetornarSemErros()
+        {
+            // Arrange
+            var pedido = Pedido.PedidoFactory.NovoPedidoRascunho(Guid.NewGuid());
+            var voucher = new Voucher("PROMO-15-REAIS", 15, null, 1,
+                DateTime.Now.AddDays(15), true, false, TipoDescontoVoucher.Valor);
+            // Act
+            var result = pedido.AplicarVoucher(voucher);
+
+            // Assert
+            Assert.True(result.IsValid);
+        }
+
+        [Fact(DisplayName = "Aplicar Voucher Inválido")]
+        [Trait("Categoria", "Vendas - Pedido")]
+        public void Pedido_AplicarVoucherInvalido_DeveRetornarComErros()
+        {
+            // Arrange
+            var pedido = Pedido.PedidoFactory.NovoPedidoRascunho(Guid.NewGuid());
+            var voucher = new Voucher("", null, null, 0,
+                DateTime.Now.AddDays(-1), false, true, TipoDescontoVoucher.Valor);
+            // Act
+            var result = pedido.AplicarVoucher(voucher);
+
+            // Assert
+            Assert.False(result.IsValid);
+        }
+
+        [Fact(DisplayName = "Aplicar voucher Tipo Valor")]
+        [Trait("Categoria", "Vendas - Pedido")]
+        public void AplicarVoucher_VoucherTipoValorDesconto_DeveDescontarDoValorTotal()
+        {
+            // Arrange
+            var pedido = Pedido.PedidoFactory.NovoPedidoRascunho(Guid.NewGuid());
+
+            var pedidoItem1 = new PedidoItem(Guid.NewGuid(), "Produto Xpto", 2, 100);
+            var pedidoItem2 = new PedidoItem(Guid.NewGuid(), "Produto Teste", 3, 20);
+            pedido.AdicionarItem(pedidoItem1);
+            pedido.AdicionarItem(pedidoItem2);
+
+            var voucher = new Voucher("PROMO-15-REAIS", 20, null, 1,
+                DateTime.Now.AddDays(15), true, false, TipoDescontoVoucher.Valor);
+
+            var valorComDesconto = pedido.ValorTotal - voucher.ValorDesconto;
+
+            // Act
+            pedido.AplicarVoucher(voucher);
+
+            // Assert
+            Assert.Equal(valorComDesconto, pedido.ValorTotal);
+        }
+
+        [Fact(DisplayName = "Aplicar Voucher Tipo Percentual")]
+        [Trait("Categoria", "Vendas - Pedido")]
+        public void AplicarVoucher_VoucherTipoPercentualDesconto_DeveDescontarDoValorTotal()
+        {
+            // Arrange
+            var pedido = Pedido.PedidoFactory.NovoPedidoRascunho(Guid.NewGuid());
+
+            var pedidoItem1 = new PedidoItem(Guid.NewGuid(), "Produto Xpto", 2, 100);
+            var pedidoItem2 = new PedidoItem(Guid.NewGuid(), "Produto Teste", 5, 20);
+            pedido.AdicionarItem(pedidoItem1);
+            pedido.AdicionarItem(pedidoItem2);
+
+            var voucher = new Voucher("PROMO-15-REAIS", null, 50, 1,
+                DateTime.Now.AddDays(15), true, false, TipoDescontoVoucher.Porcentagem);
+
+            var valorComDesconto = pedido.ValorTotal - (voucher.PercentualDesconto / 100 * pedido.ValorTotal);
+
+            // Act
+            pedido.AplicarVoucher(voucher);
+
+            // Assert
+            Assert.Equal(valorComDesconto, pedido.ValorTotal);
+        }
     }
 }
