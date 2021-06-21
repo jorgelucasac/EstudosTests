@@ -49,7 +49,7 @@ namespace NerdStore.Vendas.Application.Tests.Pedidos
         {
             // Arrange
             var pedidoCommand = new AdicionarItemPedidoCommand(Guid.NewGuid(),
-                Guid.NewGuid(), "Produto Teste", Pedido.MaxUnidadesItems, 100);
+                Guid.NewGuid(), "Produto Teste", Pedido.MaxUnidadesItems+1, 100);
 
             // Act
             var result = pedidoCommand.EhValido();

@@ -42,7 +42,7 @@ namespace NerdStore.Vendas.Domain
                 throw new DomainException($"O item não existe no pedido");
         }
 
-        private PedidoItem ObterPedidoItemExistente(Guid produtoId)
+        public PedidoItem ObterPedidoItemExistente(Guid produtoId)
         {
             return _pedidoItens.FirstOrDefault(a => a.ProdutoId == produtoId);
         }
