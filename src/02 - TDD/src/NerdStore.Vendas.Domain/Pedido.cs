@@ -6,7 +6,7 @@ using NerdStore.Core.DomainObjects;
 
 namespace NerdStore.Vendas.Domain
 {
-    public class Pedido : Entity
+    public class Pedido : Entity, IAggregateRoot
     {
         public const int MaxUnidadesItems = 15;
         public const int MinUnidadesItems = 1;

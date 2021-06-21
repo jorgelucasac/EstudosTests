@@ -22,6 +22,8 @@ namespace NerdStore.Vendas.Application.Tests.Pedidos
 
             var moker = new AutoMocker();
             var pedidoHandler = moker.CreateInstance<PedidoCommandHandler>();
+            moker.GetMock<IPedidoRepository>().Setup(
+                p => p.UnitOfWork.Commit()).Returns(Task.FromResult(true));
 
             // Act
             var result = await pedidoHandler.Handle(pedidoCommand, CancellationToken.None);
@@ -29,8 +31,8 @@ namespace NerdStore.Vendas.Application.Tests.Pedidos
             // Assert
             Assert.True(result);
             moker.GetMock<IPedidoRepository>().Verify(r => r.Adicionar(It.IsAny<Pedido>()), Times.Once);
-            //moker.GetMock<IPedidoRepository>().Verify(r => r.UnitOfWork.Commit(), Times.Once);
-            moker.GetMock<IMediator>().Verify(r => r.Publish(It.IsAny<INotification>(), CancellationToken.None), Times.Once);
+            moker.GetMock<IPedidoRepository>().Verify(r => r.UnitOfWork.Commit(), Times.Once);
+            //moker.GetMock<IMediator>().Verify(r => r.Publish(It.IsAny<INotification>(), CancellationToken.None), Times.Once);
         }
     }
 
