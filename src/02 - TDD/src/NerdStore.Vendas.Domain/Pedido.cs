@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
+using NerdStore.Core.DomainObjects;
 
 namespace NerdStore.Vendas.Domain
 {
-    public class Pedido
+    public class Pedido : Entity
     {
         public const int MaxUnidadesItems = 15;
         public const int MinUnidadesItems = 1;
@@ -74,7 +75,7 @@ namespace NerdStore.Vendas.Domain
 
             _pedidoItens.Add(pedidoItem);
             CalcularValorPedido();
-           
+
 
         }
 

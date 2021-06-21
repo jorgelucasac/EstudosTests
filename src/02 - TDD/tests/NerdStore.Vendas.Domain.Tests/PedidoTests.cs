@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using NerdStore.Core.DomainObjects;
 using Xunit;
 namespace NerdStore.Vendas.Domain.Tests
 {

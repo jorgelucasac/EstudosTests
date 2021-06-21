@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NerdStore.Vendas.Domain
+namespace NerdStore.Core.DomainObjects
 {
     public class DomainException : Exception
     {
