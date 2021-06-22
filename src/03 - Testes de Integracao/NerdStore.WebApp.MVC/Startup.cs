@@ -56,11 +56,14 @@ namespace NerdStore.WebApp.MVC
             services.AddMvcConfigurarion();
             services.AddHttpContextAccessor();
 
+            services.AddSwaggerConfiguration();
+
             services.RegisterServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwaggerConfiguration();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -71,6 +74,7 @@ namespace NerdStore.WebApp.MVC
                 app.UseHsts();
             }
 
+            app.UseCors("Total");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -81,6 +85,7 @@ namespace NerdStore.WebApp.MVC
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapControllerRoute(
                     "default",
                     "{controller=Home}/{action=Index}/{id?}");

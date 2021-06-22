@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Mime;
 
 namespace NerdStore.WebApp.Tests.Config
 {
@@ -21,7 +22,7 @@ namespace NerdStore.WebApp.Tests.Config
         public static void AtribuirJsonMediaType(this HttpClient client)
         {
             client.DefaultRequestHeaders.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json));
         }
     }
 }

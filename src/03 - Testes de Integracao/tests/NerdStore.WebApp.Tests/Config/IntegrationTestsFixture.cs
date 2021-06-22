@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Mime;
+using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Bogus;
 using Microsoft.AspNetCore.Mvc.Testing;
 using NerdStore.WebApp.MVC;
+using NerdStore.WebApp.MVC.Models;
 using Xunit;
 
 namespace NerdStore.WebApp.Tests.Config
@@ -26,6 +30,7 @@ namespace NerdStore.WebApp.Tests.Config
         public string UsuarioSenha;
 
         public string AntiForgeryFieldName = "__RequestVerificationToken";
+        public string UsuarioToken { get; set; }
 
         public IntegrationTestsFixture()
         {
@@ -84,6 +89,34 @@ namespace NerdStore.WebApp.Tests.Config
 
             await Client.SendAsync(postRequest);
         }
+
+        public StringContent PrepararConteudoEnviarApi(object dado)
+        {
+            return new StringContent(
+                JsonSerializer.Serialize(dado),
+                Encoding.UTF8,
+                MediaTypeNames.Application.Json);
+        }
+
+        public async Task RealizarLoginApi()
+        {
+            var userData = new LoginViewModel
+            {
+                Email = "teste@teste.com",
+                Senha = "Teste@123"
+            };
+
+            // Recriando o client para evitar configurações de Web
+            Client = _factory.CreateClient();
+
+            var content = PrepararConteudoEnviarApi(userData);
+
+            var response = await Client.PostAsync("api/carrinho/login", content);
+            response.EnsureSuccessStatusCode();
+            UsuarioToken = await response.Content.ReadAsStringAsync();
+        }
+
+      
 
         public void Dispose()
         {

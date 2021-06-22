@@ -24,6 +24,18 @@ namespace NerdStore.WebApp.MVC.Setup
                 o.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
             services.AddRazorPages();
+            services.AddControllers();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Total",
+                    builder =>
+                        builder
+                            .AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader());
+
+
+            });
             return services;
         }
     }

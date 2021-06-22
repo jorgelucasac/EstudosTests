@@ -7,7 +7,7 @@ using AngleSharp.Html.Parser;
 using NerdStore.WebApp.MVC;
 using NerdStore.WebApp.Tests.Config;
 using Xunit;
-
+ 
 namespace NerdStore.WebApp.Tests
 {
     [Collection(nameof(IntegrationWebTestsFixtureCollection))]
