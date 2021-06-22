@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Bogus;
 using Microsoft.AspNetCore.Mvc.Testing;
 using NerdStore.WebApp.MVC;
@@ -27,12 +29,17 @@ namespace NerdStore.WebApp.Tests.Config
 
         public IntegrationTestsFixture()
         {
-            var clientOptions = new WebApplicationFactoryClientOptions{};
+            var clientOptions = new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = true,
+                BaseAddress = new Uri("http://localhost"),
+                HandleCookies = true, // para salvar os cookies ao realizar login e utilizar nas requisições
+                MaxAutomaticRedirections = 7
+            };
 
 
             _factory = new LojaAppFactory<TStartup>();
             Client = _factory.CreateClient(clientOptions);
-           // Client.BaseAddress = new Uri("https://localhost:44396/");
         }
 
 
@@ -54,6 +61,28 @@ namespace NerdStore.WebApp.Tests.Config
             }
 
             throw new ArgumentException($"Anti forgery token '{AntiForgeryFieldName}' não encontrado no HTML", nameof(htmlBody));
+        }
+
+        public async Task RealizarLoginWeb()
+        {
+            var initialResponse = await Client.GetAsync("/Identity/Account/Login");
+            initialResponse.EnsureSuccessStatusCode();
+
+            var antiForgeryToken = ObterAntiForgeryToken(await initialResponse.Content.ReadAsStringAsync());
+
+            var formData = new Dictionary<string, string>
+            {
+                {AntiForgeryFieldName, antiForgeryToken},
+                {"Input.Email", "teste@teste.com"},
+                {"Input.Password", "Teste@123"}
+            };
+
+            var postRequest = new HttpRequestMessage(HttpMethod.Post, "/Identity/Account/Login")
+            {
+                Content = new FormUrlEncodedContent(formData)
+            };
+
+            await Client.SendAsync(postRequest);
         }
 
         public void Dispose()
