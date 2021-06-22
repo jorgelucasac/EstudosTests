@@ -17,11 +17,11 @@ using NerdStore.WebApp.MVC.Setup;
 
 namespace NerdStore.WebApp.MVC
 {
-    public class Startup
+    public class StartupApiTest
     {
         public IConfiguration Configuration { get; }
 
-        public Startup(IHostEnvironment hostEnvironment)
+        public StartupApiTest(IHostEnvironment hostEnvironment)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(hostEnvironment.ContentRootPath)

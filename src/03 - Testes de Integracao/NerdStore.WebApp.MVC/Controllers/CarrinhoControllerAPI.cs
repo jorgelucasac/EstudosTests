@@ -19,6 +19,8 @@ using NerdStore.WebApp.MVC.Models;
 namespace NerdStore.WebApp.MVC.Controllers
 {
     [Authorize]
+    [ApiController]
+    [Route("api")]
     public class CarrinhoControllerApi : ControllerBase
     {
         private readonly IProdutoAppService _produtoAppService;
@@ -47,14 +49,14 @@ namespace NerdStore.WebApp.MVC.Controllers
         }
 
         [HttpGet]
-        [Route("api/carrinho")]
+        [Route("carrinho")]
         public async Task<IActionResult> Get()
         {
             return Response(await _pedidoQueries.ObterCarrinhoCliente(ClienteId));
         }
 
         [HttpPost]
-        [Route("api/carrinho")]
+        [Route("carrinho")]
         public async Task<IActionResult> Post([FromBody] ItemViewModel item)
         {
             var produto = await _produtoAppService.ObterPorId(item.Id);
@@ -72,7 +74,7 @@ namespace NerdStore.WebApp.MVC.Controllers
         }
 
         [HttpPut]
-        [Route("api/carrinho/{id:guid}")]
+        [Route("carrinho/{id:guid}")]
         public async Task<IActionResult> Put(Guid id, [FromBody] ItemViewModel item)
         {
             var produto = await _produtoAppService.ObterPorId(id);
@@ -85,7 +87,7 @@ namespace NerdStore.WebApp.MVC.Controllers
         }
 
         [HttpDelete]
-        [Route("api/carrinho/{id:guid}")]
+        [Route("carrinho/{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var produto = await _produtoAppService.ObterPorId(id);
@@ -98,7 +100,7 @@ namespace NerdStore.WebApp.MVC.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("api/login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel login)
         {
             var result = await _signInManager.PasswordSignInAsync(login.Email, login.Senha, false, true);
