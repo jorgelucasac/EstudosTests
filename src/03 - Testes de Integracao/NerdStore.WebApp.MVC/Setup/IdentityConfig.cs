@@ -30,11 +30,11 @@ namespace NerdStore.WebApp.MVC.Setup
                     options =>
                     {
                         //senha
-                        options.Password.RequiredLength = 8;
-                        options.Password.RequireLowercase = false;
-                        options.Password.RequireUppercase = false;
-                        options.Password.RequireNonAlphanumeric = false;
-                        options.Password.RequireDigit = false;
+                        //options.Password.RequiredLength = 8;
+                        //options.Password.RequireLowercase = false;
+                        //options.Password.RequireUppercase = false;
+                        //options.Password.RequireNonAlphanumeric = false;
+                        //options.Password.RequireDigit = false;
 
                         //confirmação de informãções
                         options.SignIn.RequireConfirmedEmail = false;
