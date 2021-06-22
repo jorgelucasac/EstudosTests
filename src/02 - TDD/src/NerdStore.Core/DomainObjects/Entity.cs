@@ -8,17 +8,17 @@ namespace NerdStore.Core.DomainObjects
     {
         public Guid Id { get; set; }
         public IReadOnlyCollection<Event> Notificacoes => _notificacoes.AsReadOnly();
-        private List<Event> _notificacoes;
+        private readonly List<Event> _notificacoes;
 
 
         protected Entity()
         {
             Id = Guid.NewGuid();
+            _notificacoes = new List<Event>();
         }
 
         public void AdicionarEvento(Event evento)
         {
-            _notificacoes ??= new List<Event>();
             _notificacoes.Add(evento);
         }
 

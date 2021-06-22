@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentValidation;
 using FluentValidation.Results;
+using NerdStore.Core.DomainObjects;
 
 namespace NerdStore.Vendas.Domain
 {
-    public class Voucher
+    public class Voucher : Entity
     {
 
         public string Codigo { get; }
@@ -16,6 +18,11 @@ namespace NerdStore.Vendas.Domain
         public bool Ativo { get; }
         public bool Utilizado { get; }
 
+        // EF Rel.
+        public ICollection<Pedido> Pedidos { get; set; }
+
+
+        protected Voucher() { }
 
         public Voucher(string codigo, decimal? valorDesconto, decimal? percentualDesconto, int quantidade, DateTime dataValidade, bool ativo, bool utilizado, TipoDescontoVoucher tipoDescontoVoucher)
         {
