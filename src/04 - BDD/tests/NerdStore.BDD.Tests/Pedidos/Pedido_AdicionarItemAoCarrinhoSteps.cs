@@ -1,4 +1,5 @@
 ﻿using System;
+using NerdStore.BDD.Tests.Config;
 using TechTalk.SpecFlow;
 
 namespace NerdStore.BDD.Tests.Pedidos
@@ -10,7 +11,10 @@ namespace NerdStore.BDD.Tests.Pedidos
         public void DadoQueUmProdutoEstejaNaVitrine()
         {
             // Arrange
-
+            var browser = new SeleniumHelper(Browser.Chrome, new ConfigurationHelper(), false);
+            browser.IrParaUrl("https://desenvolvedor.io/");
+            browser.ClicarLinkPorTexto("Entrar");
+            browser.PreencherTextBoxPorName("Email", "teste@teste.com");
             // Act 
 
             // Assert
