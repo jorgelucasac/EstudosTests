@@ -32,13 +32,15 @@ namespace NerdStore.BDD.Tests.Usuarios
         [Then(@"Ele será redirecionado para a vitrine")]
         public void EntaoEleSeraRedirecionadoParaAVitrine()
         {
-            ScenarioContext.Current.Pending();
+            // Assert
+            Assert.Equal(_testsFixture.Configuration.VitrineUrl, _cadastroDeUsuarioTela.ObterUrl());
         }
 
         [Then(@"Uma saudação com seu e-mail será exibida no menu superior")]
         public void EntaoUmaSaudacaoComSeuE_MailSeraExibidaNoMenuSuperior()
         {
-            ScenarioContext.Current.Pending();
+            // Assert
+            Assert.True(_cadastroDeUsuarioTela.ValidarSaudacaoUsuarioLogado(_testsFixture.Usuario));
         }
     }
 }
