@@ -1,47 +1,72 @@
 ﻿using System;
+using NerdStore.BDD.Tests.Config;
 using TechTalk.SpecFlow;
+using Xunit;
 
 namespace NerdStore.BDD.Tests.Usuarios
 {
     [Binding]
+    [CollectionDefinition(nameof(AutomacaoWebFixtureCollection))]
     public class Usuario_CadastroSteps
     {
+        private readonly CadastroDeUsuarioTela _cadastroDeUsuarioTela;
+        private readonly AutomacaoWebTestsFixture _testsFixture;
+
+        public Usuario_CadastroSteps(AutomacaoWebTestsFixture testsFixture)
+        {
+            _testsFixture = testsFixture;
+            _cadastroDeUsuarioTela = new CadastroDeUsuarioTela(_testsFixture.BrowserHelper);
+        }
+
+
         [When(@"Ele clicar em registrar")]
         public void QuandoEleClicarEmRegistrar()
         {
-            ScenarioContext.Current.Pending();
+            // Act
+            _cadastroDeUsuarioTela.ClicarNoLinkRegistrar();
+
+            // Assert
+            Assert.Contains(_testsFixture.Configuration.RegisterUrl, _cadastroDeUsuarioTela.ObterUrl());
         }
-        
+
         [When(@"Preencher os dados do formulario")]
         public void QuandoPreencherOsDadosDoFormulario(Table table)
         {
-            ScenarioContext.Current.Pending();
+            // Arrange
+            _testsFixture.GerarDadosUsuario();
+            var usuario = _testsFixture.Usuario;
+
+            // Act
+            _cadastroDeUsuarioTela.PreencherFormularioRegistro(usuario);
+
+            // Assert
+            Assert.True(_cadastroDeUsuarioTela.ValidarPreenchimentoFormularioRegistro(usuario));
         }
-        
+
         [When(@"Clicar no botão registrar")]
         public void QuandoClicarNoBotaoRegistrar()
         {
-            ScenarioContext.Current.Pending();
+           _cadastroDeUsuarioTela.ClicarNoBotaoRegistrar();
         }
-        
+
         [When(@"Preencher os dados do formulario com uma senha sem maiusculas")]
         public void QuandoPreencherOsDadosDoFormularioComUmaSenhaSemMaiusculas(Table table)
         {
             ScenarioContext.Current.Pending();
         }
-        
+
         [When(@"Preencher os dados do formulario com uma senha sem caractere especial")]
         public void QuandoPreencherOsDadosDoFormularioComUmaSenhaSemCaractereEspecial(Table table)
         {
             ScenarioContext.Current.Pending();
         }
-        
+
         [Then(@"Ele receberá uma mensagem de erro que a senha precisa conter uma letra maiuscula")]
         public void EntaoEleReceberaUmaMensagemDeErroQueASenhaPrecisaConterUmaLetraMaiuscula()
         {
             ScenarioContext.Current.Pending();
         }
-        
+
         [Then(@"Ele receberá uma mensagem de erro que a senha precisa conter um caractere especial")]
         public void EntaoEleReceberaUmaMensagemDeErroQueASenhaPrecisaConterUmCaractereEspecial()
         {
